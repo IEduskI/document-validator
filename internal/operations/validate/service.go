@@ -21,20 +21,31 @@ func NewService(factory documentvalidator.ValidatorFactory) *service {
 }
 
 func (s *service) Validate(ctx context.Context, request Request) error {
-	// Create a document with the request values
-	doc := internal.Document{
-		Type:         request.Type,
-		Value:        request.Value,
-		IssueCountry: request.IssueCountry,
-		IssueDate:    request.IssueDate,
-		ExpiryDate:   request.ExpiryDate,
+
+	// Iterate over the documents
+	for _, doc := range request.Document {
+		// Validate the document
+		docValidator, err := s.factory.GetValidator(doc.Type)
+		if err != nil {
+			return err
+		}
+
+		parsedDoc := buildDocument(doc)
+
+		if err := docValidator.Validate(ctx, parsedDoc); err != nil {
+			return err
+		}
 	}
 
-	// Validate the document
-	docValidator, err := s.factory.GetValidator(doc.Type)
-	if err != nil {
-		return err
-	}
+	return nil
+}
 
-	return docValidator.Validate(ctx, doc)
+func buildDocument(doc Document) internal.Document {
+	return internal.Document{
+		Type:         doc.Type,
+		Value:        doc.Value,
+		IssueCountry: doc.IssueCountry,
+		IssueDate:    doc.IssueDate,
+		ExpiryDate:   doc.ExpiryDate,
+	}
 }

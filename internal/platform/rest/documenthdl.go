@@ -39,16 +39,23 @@ func (h *ValidateDocumentHandler) ServeHTTP(w http.ResponseWriter, r *http.Reque
 
 	// write the success response
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(buildResponse("Document is valid"))
+	json.NewEncoder(w).Encode(buildResponse("Documents are valid"))
 }
 
 func buildRequest(req Request) validate.Request {
+	var documents []validate.Document
+	for _, doc := range req.Documents {
+		documents = append(documents, validate.Document{
+			Type:         doc.Type,
+			Value:        doc.Value,
+			IssueCountry: doc.IssueCountry,
+			IssueDate:    doc.IssueDate,
+			ExpiryDate:   doc.ExpiryDate,
+		})
+	}
+
 	return validate.Request{
-		Type:         req.Type,
-		Value:        req.Value,
-		IssueCountry: req.IssueCountry,
-		IssueDate:    req.IssueDate,
-		ExpiryDate:   req.ExpiryDate,
+		Document: documents,
 	}
 }
 

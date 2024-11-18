@@ -36,7 +36,7 @@ func NewDocumentValidatorFactory(docs []string) (*DocumentValidatorFactory, erro
 func (f *DocumentValidatorFactory) GetValidator(docType string) (internal.DocumentValidator, error) {
 	validator, exists := f.validators[docType]
 	if !exists {
-		return nil, internal.ErrValidatorNotFound
+		return nil, internal.ErrInvalidDocumentType
 	}
 	return validator, nil
 }
