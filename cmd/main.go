@@ -4,12 +4,19 @@ import (
 	"document-validator/internal/operations/validate"
 	"document-validator/internal/platform/documentvalidator"
 	"document-validator/internal/platform/rest"
+	"document-validator/utils"
 	"log"
 	"net/http"
 )
 
 func main() {
-	factory := documentvalidator.NewDocumentValidatorFactory()
+	config := utils.NewConfig()
+
+	factory, err := documentvalidator.NewDocumentValidatorFactory(config.GetServiceDocumentsTypes())
+	if err != nil {
+		log.Fatalf("Error creating document validator factory: %v", err)
+	}
+
 	service := validate.NewService(factory)
 	handler := rest.NewValidateDocumentHandler(service)
 

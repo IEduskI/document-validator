@@ -9,4 +9,5 @@ var (
 	ErrInvalidExpiryDate   = errors.New("invalid expiry date")
 	ErrInvalidKTN          = errors.New("invalid KTN")
 	ErrInvalidDocumentType = errors.New("invalid document type")
+	ErrValidatorNotFound   = errors.New("validator not found")
 )

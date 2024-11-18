@@ -79,6 +79,9 @@ func buildErrorResponse(err error, w http.ResponseWriter) {
 	case errors.Is(err, internal.ErrInvalidDocumentType):
 		w.WriteHeader(http.StatusBadRequest)
 		response = Error{Description: internal.ErrInvalidDocumentType.Error()}
+	case errors.Is(err, internal.ErrValidatorNotFound):
+		w.WriteHeader(http.StatusBadRequest)
+		response = Error{Description: internal.ErrValidatorNotFound.Error()}
 	default:
 		w.WriteHeader(http.StatusInternalServerError)
 		response = Error{Description: "Internal server error"}
