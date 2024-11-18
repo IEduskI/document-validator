@@ -2,13 +2,15 @@ package main
 
 import (
 	"document-validator/internal/operations/validate"
+	"document-validator/internal/platform/documentvalidator"
 	"document-validator/internal/platform/rest"
 	"log"
 	"net/http"
 )
 
 func main() {
-	service := validate.NewService()
+	factory := documentvalidator.NewDocumentValidatorFactory()
+	service := validate.NewService(factory)
 	handler := rest.NewValidateDocumentHandler(service)
 
 	http.HandleFunc("POST /document/validate", handler.ServeHTTP)

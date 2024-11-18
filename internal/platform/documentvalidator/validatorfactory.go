@@ -5,7 +5,17 @@ import (
 	"fmt"
 )
 
-func DocumentValidatorFactory(docType string) (internal.DocumentValidator, error) {
+type ValidatorFactory interface {
+	GetValidator(docType string) (internal.DocumentValidator, error)
+}
+
+type DocumentValidatorFactory struct{}
+
+func NewDocumentValidatorFactory() *DocumentValidatorFactory {
+	return &DocumentValidatorFactory{}
+}
+
+func (vf *DocumentValidatorFactory) GetValidator(docType string) (internal.DocumentValidator, error) {
 	switch docType {
 	case "I":
 		return &NationalIDValidator{}, nil

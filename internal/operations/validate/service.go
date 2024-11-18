@@ -10,10 +10,14 @@ type Service interface {
 	Validate(ctx context.Context, request Request) error
 }
 
-type service struct{}
+type service struct {
+	factory documentvalidator.ValidatorFactory
+}
 
-func NewService() *service {
-	return &service{}
+func NewService(factory documentvalidator.ValidatorFactory) *service {
+	return &service{
+		factory: factory,
+	}
 }
 
 func (s *service) Validate(ctx context.Context, request Request) error {
@@ -27,7 +31,7 @@ func (s *service) Validate(ctx context.Context, request Request) error {
 	}
 
 	// Validate the document
-	docValidator, err := documentvalidator.DocumentValidatorFactory(doc.Type)
+	docValidator, err := s.factory.GetValidator(doc.Type)
 	if err != nil {
 		return err
 	}
