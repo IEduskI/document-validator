@@ -6,6 +6,7 @@ import (
 
 // ValidatorFactory is an interface for getting a document validator
 type ValidatorFactory interface {
+	// GetValidator returns a document validator for the given document type
 	GetValidator(docType string) (internal.DocumentValidator, error)
 }
 

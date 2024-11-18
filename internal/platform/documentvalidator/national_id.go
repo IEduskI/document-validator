@@ -7,6 +7,7 @@ import (
 	"regexp"
 )
 
+// NationalIDValidator is a validator for national id documents
 type NationalIDValidator struct{}
 
 func (v *NationalIDValidator) Validate(ctx context.Context, doc internal.Document) error {
